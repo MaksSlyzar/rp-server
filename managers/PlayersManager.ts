@@ -23,7 +23,8 @@ class PlayerManager {
     newPlayer.socket.emit("updateEvent", {
       playersData: playersNetworkData.filter(_player => _player.id !== newPlayer.id ),
       ownPlayerData: newPlayer.networkData(),
-      worldObjectsData: WorldObjectsManager.objects.map(wo => wo.networkData())
+      worldObjectsData: WorldObjectsManager.objects.map(wo => wo.networkData()),
+      unitsData: []
     });
   }
 

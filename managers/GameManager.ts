@@ -7,8 +7,10 @@ class GameManager {
   
   update () {
     PlayersManager.update();
+    WorldObjectsManager.update();
 
     const playersNetworkData = PlayersManager.players.map(player => player.networkData());
+    const unitsNetworkData = WorldObjectsManager.unitObjects.map(unit => unit.networkData());
 
     PlayersManager.players.map(player => {
       const ownPlayer = PlayersManager.findPlayerById(player.id);
@@ -18,13 +20,14 @@ class GameManager {
           return false;
          
         object.networkUpdateId = object.lastUpdateId;
-        return true;  
-      })
+        return true;
+      });
 
       player.socket.emit("updateEvent", {
         playersData: playersNetworkData.filter(_player => _player.id !== player.id ),
         ownPlayerData: ownPlayer==null? null: ownPlayer.networkData(),
-        worldObjectsData: worldObjectDataMap.map(wo => wo.networkData())
+        worldObjectsData: worldObjectDataMap.map(wo => wo.networkData()),
+        unitsData: unitsNetworkData
       });
     });
 

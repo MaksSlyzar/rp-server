@@ -20,11 +20,25 @@ class GameObject {
 
     update () {};
 
-    networkData () {
+    networkData (): any {
         return {
             id: this.id,
             type: "GameObject"
         }
+    }
+
+    getPosWithCollider () {
+        if (this.collider == null) {
+            console.error("This gameobject haven't collider.");
+            return null;
+        }
+
+        return {
+            x: this.posX + this.collider.x,
+            y: this.posY + this.collider.y,
+            width: this.collider.width,
+            height: this.collider.height
+        };
     }
 }
 

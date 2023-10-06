@@ -8,6 +8,7 @@ class GoldenOre extends GameObject {
         width: 64,
         height: 64 
     };
+    type: string = "GoldenOre";
 
     constructor () {
         super();

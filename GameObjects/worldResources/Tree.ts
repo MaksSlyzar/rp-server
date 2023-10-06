@@ -3,11 +3,12 @@ import GameObject from "../GameObject";
 class Tree extends GameObject {
     collision = true;
     collider = {
-        x: 35,
-        y: 35,
-        width: 50,
-        height: 50 
+        x: 0,
+        y: 0,
+        width: 64,
+        height: 64 
     };
+    type: string = "tree";
 
     constructor () {
         super();

@@ -1,6 +1,13 @@
 import { Server } from "http";
 import * as socketio from "socket.io";
 import PlayersManager from "./PlayersManager";
+import WorldObjectsManager from "./WorldObjectsManager";
+import { MoveToGameObjectEvent } from "../GameObjects/Unit/Unit";
+
+interface GetResource {
+  objectId: number,
+  playerId: number
+};
 
 class EventManager {
   io: socketio.Server|null = null;
@@ -23,14 +30,21 @@ class EventManager {
     this.io.on("connection", (socket: socketio.Socket) => {
       console.log("Connection");
 
-      socket.on("createPlayerEvent", () => this.createPlayerEvent(socket));
+      socket.on("createPlayerEvent", () => {
+        console.log("Create new player event")
+        this.createPlayerEvent(socket);
+        // const newUnitEvent = new MoveToGameObjectEvent(WorldObjectsManager.objects[3].id);
+        // console.log(newUnitEvent.update)
+        // WorldObjectsManager.unitObjects[0].eventsTurn.push(newUnitEvent)
+        // WorldObjectsManager.unitObjects[0].subcribeEvent(newUnitEvent); 
+      });
       
       socket.on("disconnect", () => {
         PlayersManager.deletePlayerBySocketId(socket.id);
       });
       
       socket.on("setPlayerTarget", (data) => {
-        console.log(data);
+        // console.log(data);
         const player = PlayersManager.findPlayerById(data.id);
         
         if (!player)
@@ -38,6 +52,40 @@ class EventManager {
         
         player.targetX = data.targetX;
         player.targetY = data.targetY;
+
+        player.findPath = false;
+      });
+
+      socket.on("getResource", (data: GetResource) => {
+        console.log("Getting resources")
+      });
+
+      socket.on("pushNewEvent", (data) => {
+        const player = PlayersManager.findPlayerById(data.id);
+
+        if (!player)
+          return;
+
+        switch (data.type) {
+          case "move-to-gameobject-event":
+            // player.subscribeEvent(new MoveToGameObjectEvent(data.gameObjectId));
+          break;
+
+          case "get-resource-event":
+
+          break;
+        }
+      });
+
+      socket.on("player-move-direction", (data) => {
+        const { id, direction } = data;
+
+        const player = PlayersManager.findPlayerById(id);
+
+        if (!player)
+          return;
+        
+        player.move(direction);
       });
     });
   }
