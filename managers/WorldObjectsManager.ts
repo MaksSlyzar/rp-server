@@ -3,6 +3,8 @@ import Unit, { MoveToGameObjectEvent } from "../GameObjects/Unit/Unit";
 import GoldenOre from "../GameObjects/worldResources/GoldenOre";
 import Tree from "../GameObjects/worldResources/Tree";
 import { AStarFinder, Grid } from "astar-typescript";
+import { getRandomInt } from "../modules/Random";
+import BlueCrystal from "../GameObjects/worldResources/BlueCrystal";
 
 class WorldObjectsManager {
     objects: Array<GameObject> = [];
@@ -26,12 +28,12 @@ class WorldObjectsManager {
     }
 
     spawnObjects () {
-        // for (let i = 4; i <= 5; i+=1) {
-        //     for (let k = 4; k <= 5; k+=1) {
+        // for (let i = 1; i <= 10; i+=1) {
+        //     for (let k = 1; k <= 10; k+=1) {
         //         const newTree = new Tree();
 
-        //         newTree.posX = i * 32;
-        //         newTree.posY = k * 32;
+        //         newTree.posX = i * 200;
+        //         newTree.posY = k * 200;
 
         //         newTree.posX -= newTree.posX % 32;
         //         newTree.posY -= newTree.posY % 32;
@@ -40,29 +42,65 @@ class WorldObjectsManager {
         //     }
         // }
 
-        const newTree = new Tree();
+        // const newTree = new Tree();
 
-        newTree.posX = 4 * 32;
-        newTree.posY = 4 * 32;
-        this.objects.push(newTree);
+        // newTree.posX = 4 * 32;
+        // newTree.posY = 4 * 32;
+        // this.objects.push(newTree);
 
 
-        for (let object of this.objects) {
-            const clitesWidth = object.collider.width / 32;
-            const clitesHeight = object.collider.height / 32;
+        // for (let object of this.objects) {
+        //     const clitesWidth = object.collider.width / 32;
+        //     const clitesHeight = object.collider.height / 32;
 
-            for (let y = 0; y < clitesHeight; y++) {
-                for (let x = 0; x < clitesWidth; x++) {
+        //     for (let y = 0; y < clitesHeight; y++) {
+        //         for (let x = 0; x < clitesWidth; x++) {
 
-                    try {
-                        this.matrix[y + object.posY / 32][x + object.posX / 32] = 1;
+        //             try {
+        //                 this.matrix[y + object.posY / 32][x + object.posX / 32] = 1;
                 
-                    } catch {
-                        console.log(y + object.posY / 32, x + object.posX / 32);
-                    }
-                }
-            }
+        //             } catch {
+        //                 console.log(y + object.posY / 32, x + object.posX / 32);
+        //             }
+        //         }
+        //     }
+        // }
+    
+        
+        for (let i = 0; i < 150; i++) {
+            const randomX = getRandomInt(0, 50);
+            const randomY = getRandomInt(0, 50);
+
+            const newCrystal = new Tree();
+            newCrystal.posX = randomX * 120;
+            newCrystal.posY = randomY * 120;
+            
+            this.objects.push(newCrystal);
         }
+
+        for (let i = 0; i < 13; i++) {
+            const randomX = getRandomInt(0, 80);
+            const randomY = getRandomInt(0, 80);
+
+            const newCrystal = new BlueCrystal();
+            newCrystal.posX = randomX * 32;
+            newCrystal.posY = randomY * 32;
+            
+            this.objects.push(newCrystal);
+        }
+
+        for (let i = 0; i < 13; i++) {
+            const randomX = getRandomInt(0, 80);
+            const randomY = getRandomInt(0, 80);
+
+            const newCrystal = new GoldenOre();
+            newCrystal.posX = randomX * 32;
+            newCrystal.posY = randomY * 32;
+            
+            this.objects.push(newCrystal);
+        }
+
+        
 
         // console.log(this.matrix);
 

@@ -24,12 +24,13 @@ class Player extends GameObject {
   collider = { 
     x: 0,
     y: 0,
-    width: 32,
-    height: 32,
+    width: 64,
+    height: 64,
   };
   isMove: boolean = false;
   targetMovePosition: { posX: number, posY: number } | null = null;
   inventory: Inventory;
+  direction: "RIGHT"|"LEFT"|"UP"|"DOWN"|"RIGHT-UP"|"LEFT-UP"|"LEFT-DOWN"|"RIGHT-DOWN" = "LEFT";
 
   constructor () {
     super();
@@ -38,7 +39,7 @@ class Player extends GameObject {
     this.posY = 128;
     this.targetX = 0;
     this.targetY = 0;
-    this.movespeed = 5;
+    this.movespeed = 2.5;
     this.rotation = 0;
     this.id = Math.round(Math.random() * 10000000);
 
@@ -92,11 +93,12 @@ class Player extends GameObject {
       posX: this.posX,
       posY: this.posY,
       id: this.id,
-      inventory: this.inventory.networkData()
+      inventory: this.inventory.networkData(),
+      direction: this.direction
     }
   }
 
-  move (direction: string) {
+  move (dir: string) {
     if (this.isMove == true)
       return;
 
@@ -105,78 +107,44 @@ class Player extends GameObject {
       posY: this.posY
     };
 
-    const newDirection = direction.split(";");
+    const direction = dir as "UP" | "DOWN" | "LEFT" | "RIGHT";
+    // console.log(direction)
+    // if (newDirection.includes("right")) {
+    //   newPosition.posX += this.movespeed * 4;
+    // }
 
-    if (newDirection.includes("right")) {
-      newPosition.posX += this.movespeed * 4;
+    // if (newDirection.includes("left")) {
+    //   newPosition.posX -= this.movespeed * 4
+    // }
+
+    // if (newDirection.includes("up")) {
+    //   newPosition.posY -= this.movespeed * 4;
+    // }
+
+    // if (newDirection.includes("down")) {
+    //   newPosition.posY += this.movespeed * 4;
+    // }
+
+    switch (direction) {
+      case "UP":
+        newPosition.posY -= this.movespeed * 4;
+      break;
+      case "DOWN":
+        newPosition.posY += this.movespeed * 4;
+      break;
+      case "LEFT":
+        newPosition.posX -= this.movespeed * 4;
+      break;
+      case "RIGHT":
+        newPosition.posX += this.movespeed * 4;
+      break;
     }
 
-    if (newDirection.includes("left")) {
-      newPosition.posX -= this.movespeed * 4
-    }
-
-    if (newDirection.includes("up")) {
-      newPosition.posY -= this.movespeed * 4;
-    }
-
-    if (newDirection.includes("down")) {
-      newPosition.posY += this.movespeed * 4;
-    }
+    this.direction = direction;
 
     this.targetMovePosition = newPosition;
 
     this.isMove = true;
-
-
-
-    // let newPosition = {
-    //   posX: this.posX,
-    //   posY: this.posY
-    // };
-
-    // if (direction == "right") {
-    //   newPosition.posX += this.movespeed;
-    // }
-
-    // if (direction == "left") {
-    //   newPosition.posX -= this.movespeed;
-    // }
-
-    // if (direction == "up") {
-    //   newPosition.posY -= this.movespeed;
-    // }
-
-    // if (direction == "down") {
-    //   newPosition.posY += this.movespeed;
-    // }
-
-
-    // const collidedObjects = WorldObjectsManager.objects.filter(object => {
-    //   if (object.collision == false)
-    //     return false
-
-    //   return !CheckCollision({
-    //     x: object.posX,
-    //     y: object.posY,
-    //     width: object.collider.width,
-    //     height: object.collider.height
-    //   },
-    //   {
-    //     x: newPosition.posX,
-    //     y: newPosition.posY,
-    //     width: this.collider.width,
-    //     height: this.collider.height
-    //   })
-    // });
-
-    // console.log(collidedObjects)
-
-    // if (collidedObjects.length == 0) {
-    //   this.posX = newPosition.posX;
-    //   this.posY = newPosition.posY;
-    // }
-
-    
   }
 
 }
