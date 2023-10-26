@@ -48,7 +48,7 @@ class PlayerManager {
   deletePlayerBySocketId (socketId: string) {
     this.players.map((player, index) => {
       if (player.socket.id == socketId)
-        this.players.splice(index);
+        this.players.splice(index, 1);
     })
   }
 }

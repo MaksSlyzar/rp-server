@@ -107,7 +107,7 @@ class Player extends GameObject {
       posY: this.posY
     };
 
-    const direction = dir as "UP" | "DOWN" | "LEFT" | "RIGHT";
+    const direction = dir as typeof this.direction;
     // console.log(direction)
     // if (newDirection.includes("right")) {
     //   newPosition.posX += this.movespeed * 4;
@@ -137,6 +137,22 @@ class Player extends GameObject {
       break;
       case "RIGHT":
         newPosition.posX += this.movespeed * 4;
+      break;
+      case "RIGHT-UP":
+        newPosition.posY -= this.movespeed * 4;
+        newPosition.posX += this.movespeed * 4;
+      break;
+      case "RIGHT-DOWN":
+        newPosition.posY += this.movespeed * 4;
+        newPosition.posX += this.movespeed * 4;
+      break;
+      case "LEFT-UP":
+        newPosition.posY -= this.movespeed * 4;
+        newPosition.posX -= this.movespeed * 4;
+      break;
+      case "LEFT-DOWN":
+        newPosition.posY += this.movespeed * 4;
+        newPosition.posX -= this.movespeed * 4;
       break;
     }
 
