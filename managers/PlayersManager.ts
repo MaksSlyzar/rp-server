@@ -29,7 +29,6 @@ class PlayerManager {
   }
 
   update () {
-    // console.log("dt");
     this.players.map(player => {
       player.update();
     });
@@ -37,8 +36,7 @@ class PlayerManager {
 
   findPlayerById (id: number) {
     const players = this.players.filter(player => player.id == id);
-    // console.log(players, id)
-    // console.log(this.players)
+
     if (players.length > 0)
       return players[0];
     else 

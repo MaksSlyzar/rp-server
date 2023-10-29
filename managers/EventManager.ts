@@ -33,10 +33,6 @@ class EventManager {
       socket.on("createPlayerEvent", () => {
         console.log("Create new player event")
         this.createPlayerEvent(socket);
-        // const newUnitEvent = new MoveToGameObjectEvent(WorldObjectsManager.objects[3].id);
-        // console.log(newUnitEvent.update)
-        // WorldObjectsManager.unitObjects[0].eventsTurn.push(newUnitEvent)
-        // WorldObjectsManager.unitObjects[0].subcribeEvent(newUnitEvent); 
       });
       
       socket.on("disconnect", () => {
@@ -44,7 +40,6 @@ class EventManager {
       });
       
       socket.on("setPlayerTarget", (data) => {
-        // console.log(data);
         const player = PlayersManager.findPlayerById(data.id);
         
         if (!player)
@@ -68,7 +63,7 @@ class EventManager {
 
         switch (data.type) {
           case "move-to-gameobject-event":
-            // player.subscribeEvent(new MoveToGameObjectEvent(data.gameObjectId));
+            
           break;
 
           case "get-resource-event":

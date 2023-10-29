@@ -5,8 +5,8 @@ class BlueCrystal extends GameObject {
     collider = {
         x: 0,
         y: 0,
-        width: 64,
-        height: 64 
+        width: 32,
+        height: 41 
     };
     type: string = "blue-crystal";
 

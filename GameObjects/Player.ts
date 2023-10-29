@@ -6,8 +6,6 @@ import PlayersManager from "../managers/PlayersManager";
 import { CheckDistanceRect } from "../modules/Collider/CheckDistance";
 import Inventory from "../modules/Inventory/Inventory";
 
-
-
 class Player extends GameObject {
   posX: number;
   posY: number;
@@ -22,15 +20,17 @@ class Player extends GameObject {
   findPath: boolean = true;
   movePath: number[][] = [];
   collider = { 
-    x: 0,
-    y: 0,
-    width: 64,
-    height: 64,
+    x: 16,
+    y: 16,
+    width: 48,
+    height: 48,
   };
   isMove: boolean = false;
   targetMovePosition: { posX: number, posY: number } | null = null;
   inventory: Inventory;
   direction: "RIGHT"|"LEFT"|"UP"|"DOWN"|"RIGHT-UP"|"LEFT-UP"|"LEFT-DOWN"|"RIGHT-DOWN" = "LEFT";
+
+  lastIsMove: boolean = false;
 
   constructor () {
     super();
@@ -39,7 +39,7 @@ class Player extends GameObject {
     this.posY = 128;
     this.targetX = 0;
     this.targetY = 0;
-    this.movespeed = 2.5;
+    this.movespeed = 12.8;
     this.rotation = 0;
     this.id = Math.round(Math.random() * 10000000);
 
@@ -47,11 +47,10 @@ class Player extends GameObject {
   }
 
   update () {
-    //Move
-    
     if (this.isMove) {
-      if (this.targetMovePosition.posX == this.posX && this.targetMovePosition.posY == this.posY)
+      if (Math.floor(this.targetMovePosition.posX) == Math.floor(this.posX) && Math.floor(this.targetMovePosition.posY) == Math.floor(this.posY)) {
         this.isMove = false;
+      }
 
       const backX = this.posX;
       const backY = this.posY;
@@ -74,8 +73,7 @@ class Player extends GameObject {
 
       let collision = false;
       WorldObjectsManager.objects.map(obj => {
-        // console.log(CheckDistanceRect(obj.getPosWithCollider(), this.getPosWithCollider()))
-        if (CheckDistanceRect(obj.getPosWithCollider(), this.getPosWithCollider()) < 40)  {
+        if (CheckCollision(this.getPosWithCollider(), obj.getPosWithCollider()) == false)  {
           collision = true;
         }
       });
@@ -84,6 +82,10 @@ class Player extends GameObject {
         this.posX = backX;
         this.posY = backY;
         this.isMove = false;
+      }
+
+      if (this.isMove != this.lastIsMove) {
+        this.lastIsMove = this.isMove;
       }
     }
   }
@@ -94,36 +96,18 @@ class Player extends GameObject {
       posY: this.posY,
       id: this.id,
       inventory: this.inventory.networkData(),
-      direction: this.direction
+      direction: this.direction,
+      isMove: this.isMove
     }
   }
 
   move (dir: string) {
-    if (this.isMove == true)
-      return;
-
     let newPosition = {
       posX: this.posX,
       posY: this.posY
     };
 
     const direction = dir as typeof this.direction;
-    // console.log(direction)
-    // if (newDirection.includes("right")) {
-    //   newPosition.posX += this.movespeed * 4;
-    // }
-
-    // if (newDirection.includes("left")) {
-    //   newPosition.posX -= this.movespeed * 4
-    // }
-
-    // if (newDirection.includes("up")) {
-    //   newPosition.posY -= this.movespeed * 4;
-    // }
-
-    // if (newDirection.includes("down")) {
-    //   newPosition.posY += this.movespeed * 4;
-    // }
 
     switch (direction) {
       case "UP":
@@ -157,6 +141,8 @@ class Player extends GameObject {
     }
 
     this.direction = direction;
+
+    this.isMove = true;
 
     this.targetMovePosition = newPosition;
 
